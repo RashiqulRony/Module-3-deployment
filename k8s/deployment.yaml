@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: module3-app
+  namespace: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: module3-app
+  template:
+    metadata:
+      labels:
+        app: module3-app
+    spec:
+      containers:
+        - name: module3-app
+          image: YOUR_DOCKERHUB_USERNAME/module-3-deployment:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /api
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
